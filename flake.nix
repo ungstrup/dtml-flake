@@ -52,31 +52,37 @@
         };
         installer = pkgs.writeShellApplication {
           name = "install";
-          runtimeInputs = [dtkitPatchCrate];
+          runtimeInputs = [dtkitPatchCrate pkgs.jq];
           text = ''
             SOURCE_PATH="${darktideModLoader}/"
             PATCHER=dtkit-patch
+            DT_PATH="$($PATCHER --meta | jq -r .steam)"
+
+            if [ $# -eq 0 ]; then
+                echo "Usage: $0 {install|uninstall|enable|disable}"
+                exit 1
+            fi
 
             case "$1" in
                 install)
-                    rsync -av --progress "$SOURCE_PATH" .
-                    chmod u+w bundle mods
-                    $PATCHER --patch bundle
+                    rsync -av --progress "$SOURCE_PATH" "$DT_PATH/"
+                    chmod u+w "$DT_PATH/bundle" "$DT_PATH/mods"
+                    $PATCHER --patch
                     ;;
                 uninstall)
-                    $PATCHER --unpatch bundle
-                    rm -R mods
-                    rm -R tools
-                    rm binaries/mod_loader
-                    rm bundle/9ba626afa44a3aa3.patch_999
-                    rm README.md
-                    rm toggle_darktide_mods.bat
+                    $PATCHER --unpatch
+                    rm -R "$DT_PATH/mods"
+                    rm -R "$DT_PATH/tools"
+                    rm "$DT_PATH/binaries/mod_loader"
+                    rm "$DT_PATH/bundle/9ba626afa44a3aa3.patch_999"
+                    rm "$DT_PATH/README.md"
+                    rm "$DT_PATH/toggle_darktide_mods.bat"
                     ;;
                 enable)
-                    $PATCHER --patch bundle
+                    $PATCHER --patch
                     ;;
                 disable)
-                    $PATCHER --unpatch bundle
+                    $PATCHER --unpatch
                     ;;
                 *)
                     echo "Usage: $0 {install|uninstall|enable|disable}"
