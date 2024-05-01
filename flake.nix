@@ -60,6 +60,7 @@
             case "$1" in
                 install)
                     rsync -av --progress "$SOURCE_PATH" .
+                    chmod u+w bundle mods
                     $PATCHER --patch bundle
                     ;;
                 uninstall)
