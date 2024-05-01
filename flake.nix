@@ -21,11 +21,7 @@
     rust-overlay,
     crane,
     flake-utils,
-  }: let
-    overlays = [
-      (import rust-overlay)
-    ];
-  in
+  }:
     flake-utils.lib.eachDefaultSystem (
       system: let
         pkgs = import nixpkgs {
@@ -34,26 +30,23 @@
         };
         rust = pkgs.rust-bin.stable.latest.default;
         craneLib = (crane.mkLib pkgs).overrideToolchain rust;
-        overridableCrate = pkgs.lib.makeOverridable ({toolchain}: let
-          craneLib = (crane.mkLib pkgs).overrideToolchain toolchain;
-        in
-          craneLib.buildPackage {
-            pname = "dtkit-patch";
-            version = "0.1.6";
-            src = pkgs.fetchgit {
-              url = "https://github.com/manshanko/dtkit-patch";
-              rev = "e7e71dd1ae20e4d85c95350c4997143daff438ce";
-              hash = "sha256-pGTS0Jk6ZxJj36cjQty/fLKDi67SVPBOp/wyylIfWZ0=";
-            };
-            strictDeps = true;
-          }) {toolchain = rust;};
+        dtkitPatchCrate = craneLib.buildPackage {
+          pname = "dtkit-patch";
+          version = "0.1.6";
+          src = pkgs.fetchgit {
+            url = "https://github.com/manshanko/dtkit-patch";
+            rev = "e7e71dd1ae20e4d85c95350c4997143daff438ce";
+            hash = "sha256-pGTS0Jk6ZxJj36cjQty/fLKDi67SVPBOp/wyylIfWZ0=";
+          };
+          strictDeps = true;
+        };
       in {
         packages = {
-          default = overridableCrate;
+          dtkitPatch = dtkitPatchCrate;
         };
-        checks = {inherit overridableCrate;};
+        checks = {inherit dtkitPatchCrate;};
         apps.default = flake-utils.lib.mkApp {
-          drv = overridableCrate;
+          drv = dtkitPatchCrate;
         };
         devShells.default = craneLib.devShell {
           checks = self.checks.${system};
