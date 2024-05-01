@@ -57,6 +57,7 @@
             SOURCE_PATH="${darktideModLoader}/"
             PATCHER=dtkit-patch
             DT_PATH="$($PATCHER --meta | jq -r .steam)"
+            DT_PATH="''${DT_PATH:-.}"
 
             if [ $# -eq 0 ]; then
                 echo "Usage: $0 {install|uninstall|enable|disable}"
