@@ -50,15 +50,47 @@
           ];
           hash = "sha256-H+RNawoEThmZpgQS+HKdD26cLTRxZ7ywM2yldGpvs84=";
         };
+        installer = pkgs.writeShellApplication {
+          name = "install";
+          runtimeInputs = [dtkitPatchCrate];
+          text = ''
+            SOURCE_PATH="${darktideModLoader}/"
+            PATCHER=dtkit-patch
+
+            case "$1" in
+                install)
+                    rsync -av --progress "$SOURCE_PATH" .
+                    $PATCHER --patch bundle
+                    ;;
+                uninstall)
+                    $PATCHER --unpatch bundle
+                    rm -R mods
+                    rm -R tools
+                    rm binaries/mod_loader
+                    rm bundle/9ba626afa44a3aa3.patch_999
+                    rm README.md
+                    rm toggle_darktide_mods.bat
+                    ;;
+                enable)
+                    $PATCHER --patch bundle
+                    ;;
+                disable)
+                    $PATCHER --unpatch bundle
+                    ;;
+                *)
+                    echo "Usage: $0 {install|uninstall|enable|disable}"
+                    exit 1
+                    ;;
+            esac
+          '';
+        };
       in {
         packages = {
-          dtkitPatch = dtkitPatchCrate;
           inherit darktideModLoader;
+          dtkitPatch = dtkitPatchCrate;
+          modLoader = installer;
         };
-        checks = {inherit dtkitPatchCrate;};
-        apps.default = flake-utils.lib.mkApp {
-          drv = dtkitPatchCrate;
-        };
+        checks = {inherit dtkitPatchCrate installer;};
         devShells.default = craneLib.devShell {
           checks = self.checks.${system};
         };
