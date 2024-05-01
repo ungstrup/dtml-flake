@@ -40,9 +40,20 @@
           };
           strictDeps = true;
         };
+        darktideModLoader = pkgs.fetchgit {
+          url = "https://github.com/Darktide-Mod-Framework/Darktide-Mod-Loader";
+          rev = "refs/tags/23.12.11";
+          sparseCheckout = [
+            "binaries"
+            "bundle"
+            "mods"
+          ];
+          hash = "sha256-H+RNawoEThmZpgQS+HKdD26cLTRxZ7ywM2yldGpvs84=";
+        };
       in {
         packages = {
           dtkitPatch = dtkitPatchCrate;
+          inherit darktideModLoader;
         };
         checks = {inherit dtkitPatchCrate;};
         apps.default = flake-utils.lib.mkApp {
