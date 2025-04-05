@@ -48,7 +48,7 @@
             "bundle"
             "mods"
           ];
-          hash = "sha256-H+RNawoEThmZpgQS+HKdD26cLTRxZ7ywM2yldGpvs84=";
+          hash = "sha256-h/YS40IbCtOqzBorZMqM7Ef+OEhHwdEcuMfBQvy5pMA=";
         };
         installer = pkgs.writeShellApplication {
           name = "install";
