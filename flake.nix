@@ -32,17 +32,17 @@
         craneLib = (crane.mkLib pkgs).overrideToolchain rust;
         dtkitPatchCrate = craneLib.buildPackage {
           pname = "dtkit-patch";
-          version = "0.1.6";
+          version = "0.1.7";
           src = pkgs.fetchgit {
             url = "https://github.com/manshanko/dtkit-patch";
-            rev = "e7e71dd1ae20e4d85c95350c4997143daff438ce";
+            rev = "ff03878d08f4a39abd53d8b520c3ead9c097c6f6";
             hash = "sha256-pGTS0Jk6ZxJj36cjQty/fLKDi67SVPBOp/wyylIfWZ0=";
           };
           strictDeps = true;
         };
         darktideModLoader = pkgs.fetchgit {
           url = "https://github.com/Darktide-Mod-Framework/Darktide-Mod-Loader";
-          rev = "refs/tags/23.12.11";
+          rev = "refs/tags/24.11.27";
           sparseCheckout = [
             "binaries"
             "bundle"
