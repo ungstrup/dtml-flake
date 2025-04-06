@@ -36,7 +36,7 @@
           src = pkgs.fetchgit {
             url = "https://github.com/manshanko/dtkit-patch";
             rev = "ff03878d08f4a39abd53d8b520c3ead9c097c6f6";
-            hash = "sha256-pGTS0Jk6ZxJj36cjQty/fLKDi67SVPBOp/wyylIfWZ0=";
+            hash = "sha256-P8T7Bdv4ROfcnHzdRHgekX5zIqf2OWZZZla7MZqOnaA=";
           };
           strictDeps = true;
         };
