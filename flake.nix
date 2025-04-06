@@ -32,11 +32,11 @@
         craneLib = (crane.mkLib pkgs).overrideToolchain rust;
         dtkitPatchCrate = craneLib.buildPackage {
           pname = "dtkit-patch";
-          version = "0.1.7";
+          version = "0.1.6";
           src = pkgs.fetchgit {
             url = "https://github.com/manshanko/dtkit-patch";
-            rev = "ff03878d08f4a39abd53d8b520c3ead9c097c6f6";
-            hash = "sha256-P8T7Bdv4ROfcnHzdRHgekX5zIqf2OWZZZla7MZqOnaA=";
+            rev = "e7e71dd1ae20e4d85c95350c4997143daff438ce";
+            hash = "sha256-h/YS40IbCtOqzBorZMqM7Ef+OEhHwdEcuMfBQvy5pMA=";
           };
           strictDeps = true;
         };
